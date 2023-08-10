@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { WeatherService } from '../../services/weather.service';
 import { WeatherData } from 'src/app/models/interfaces/weatherData';
 import { Subject, takeUntil } from 'rxjs';
+import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-weather-home',
@@ -9,14 +10,15 @@ import { Subject, takeUntil } from 'rxjs';
   styleUrls: []
 })
 export class WeatherHomeComponent implements OnInit, OnDestroy {
-  private defaultCityName = 'Porto Alegre'
-  private weatherData!: WeatherData
+  cityName = 'Porto Alegre'
+  weatherData!: WeatherData
   private readonly destroy$: Subject<void> = new Subject()
+  searchIcon = faMagnifyingGlass
 
   constructor(private weatherService: WeatherService) { }
 
   ngOnInit(): void {
-    this.getWeatherData(this.defaultCityName)
+    this.getWeatherData(this.cityName)
   }
 
   ngOnDestroy(): void {
@@ -35,5 +37,10 @@ export class WeatherHomeComponent implements OnInit, OnDestroy {
         },
         error: error => console.log(error)
       })
+  }
+
+  onSubmit(): void {
+    this.getWeatherData(this.cityName)
+    this.cityName = ''
   }
 }
